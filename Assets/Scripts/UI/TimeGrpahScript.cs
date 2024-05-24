@@ -39,14 +39,7 @@ public class TimeGrpahScript : MonoBehaviour
     {
         yield return http.GetMethod("statistics/count/total?date=" + date.ToString("yyyy-MM-dd"), (response) =>
         {
-            Debug.Log(response);
             WordsByTimeData temp = JsonUtility.FromJson<WordsByTimeData>(response);
-            Debug.Log(temp.max);
-
-            foreach (var entry in temp.raw)
-            {
-                Debug.Log($"Hour: {entry.hour}, Count: {entry.count}");
-            }
             
             if (temp.max > 0)
             {
@@ -55,8 +48,16 @@ public class TimeGrpahScript : MonoBehaviour
                 {
                     if (timeDatas[i].hour >= 9 && timeDatas[i].hour <= 18)
                     {
+                        float height;
                         points[timeDatas[i].hour - 9].gameObject.SetActive(true);
-                        float height = (high - low) * (timeDatas[i].count - temp.min) / (temp.max - temp.min);
+                        if(temp.max != temp.min)
+                        {
+                            height = (high - low) * (timeDatas[i].count - temp.min) / (temp.max - temp.min);
+                        }
+                        else
+                        {
+                            height = (high - low) / 2;
+                        }
                         if (timeDatas[i].count == 0)
                         {
                             height = -60;
@@ -64,13 +65,17 @@ public class TimeGrpahScript : MonoBehaviour
                         points[timeDatas[i].hour - 9].anchoredPosition = new Vector2(points[timeDatas[i].hour - 9].anchoredPosition.x, low + height);
                     }
                 }
-                max.text = temp.max.ToString();
-                min.text = temp.min.ToString();
-                avg.text = temp.avg.ToString("F1");
+                max.text = "최대" + temp.max.ToString();
+                min.text = "최소" + temp.min.ToString();
+                avg.text = "평균: " + temp.avg.ToString("F1");
                 tempTxt.SetActive(false);
             }
             else
             {
+                for(int i = 0; i < points.Length; i++)
+                {
+                    points[i].gameObject.SetActive(false);
+                }
                 max.text = "-";
                 min.text = "-";
                 avg.text = "-";

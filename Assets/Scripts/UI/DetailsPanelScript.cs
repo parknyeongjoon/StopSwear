@@ -11,6 +11,8 @@ public class DetailsPanelScript : MonoBehaviour
 
     public void SetDetails(List<WordData> wordDatas)
     {
+        SetClear();
+
         for (int i = 0; i < wordDatas.Count; i++)
         {
             WordData wordData = wordDatas[i];

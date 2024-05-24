@@ -1,34 +1,21 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.UI;
 
 public class ProgramManager : MonoBehaviour
 {
     HttpController http;
 
+    ProgramInfo programInfo;
+
     private void Start()
     {
         http = HttpController.Instance();
-        StartCoroutine(CheckProgram());
     }
 
     #region Utility
-
-    IEnumerator CheckProgram()
-    {
-        yield return http.GetMethod("manage/program/get/current", (response) =>
-        {
-            if (response != null)
-            {
-                runningProgressPanel.SetActive(true);
-                waitingProgressPanel.SetActive(false);
-            }
-        });
-    }
 
     IEnumerator GetDataByDate(DateTime date)
     {
@@ -36,13 +23,42 @@ public class ProgramManager : MonoBehaviour
         yield return wordsByDate.SetGraph(date);
     }
 
+    IEnumerator SetMyStat()
+    {
+        if (programInfo == null)
+        {
+            yield return http.GetMethod("manage/program/get/current", (response) =>
+            {
+                programInfo = http.GetJsonData<ProgramInfo>(response);
+            });
+        }
+        yield return mostWordByProgram.SetProgramGraph(programInfo.programName);
+        wordsByProgram.SetWordsByDay(programInfo.programName);
+    }
+
+    IEnumerator SetGroupStat()
+    {
+        if(programInfo == null)
+        {
+            yield return http.GetMethod("manage/program/get/current", (response) =>
+            {
+                programInfo = http.GetJsonData<ProgramInfo>(response);
+            });
+        }
+        studentGroupStat.SetPanel(programInfo.programName);
+    }
+
     #endregion
 
     #region UI
     [SerializeField] GameObject waitingProgressPanel, runningProgressPanel, myStatPanel, groupStatPanel;
+    [SerializeField] InfoPanel infoPanel;
     [SerializeField] Image[] dayToggleImg;
     [SerializeField] TimeGrpahScript wordsByTime;
     [SerializeField] WordsScript wordsByDate;
+    [SerializeField] LineGraphScript wordsByProgram;
+    [SerializeField] WordsScript mostWordByProgram;
+    [SerializeField] StudentGroupStatPanel studentGroupStat;
 
     public void DayBtnAnim(int day) // 월:0, 화:1, 수:2, 목:3, 금:4
     {
@@ -67,16 +83,13 @@ public class ProgramManager : MonoBehaviour
     {
         myStatPanel.SetActive(true);
         groupStatPanel.SetActive(false);
+        StartCoroutine(SetMyStat());
     }
 
     public void OpenGroupStat()
     {
         myStatPanel.SetActive(false);
         groupStatPanel.SetActive(true);
-    }
-
-    public void CheckProgramBtn()
-    {
-        StartCoroutine(CheckProgram());
+        StartCoroutine(SetGroupStat());
     }
 }

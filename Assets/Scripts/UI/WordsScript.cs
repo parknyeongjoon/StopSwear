@@ -5,9 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static System.Net.WebRequestMethods;
-using static TimeGrpahScript;
-//asdfasdf
+
 public class WordData
 {
     public string word;
@@ -39,6 +37,26 @@ public class WordsScript : MonoBehaviour
             {
                 mostWord.text = wordDatas[0].word + "(" + wordDatas[0].count + ")";
                 details.SetDetails(wordDatas);
+            }
+            else
+            {
+                mostWord.text = "욕설 사용 안 함!! bb";
+                details.SetClear();
+            }
+        });
+    }
+
+    public IEnumerator SetProgramGraph(string programName)
+    {
+        Debug.Log("SetProgramGraph");
+        yield return http.GetMethod("statistics/most-used/program?programName=" + programName, (response) =>
+        {
+            Debug.Log(response);
+
+            if (response != null)
+            {
+                mostWord.text = response;
+                //details.SetDetails(wordDatas);
             }
             else
             {
