@@ -12,8 +12,6 @@ public class InfoPanel : MonoBehaviour
     [SerializeField] TMP_Text nameTxt, codeTxt, progresTxt, rankTxt;
     [SerializeField] TMP_Text durationTxt;
 
-    ProgramInfo programInfo;
-
     class UserInfo
     {
         public string name;
@@ -27,20 +25,24 @@ public class InfoPanel : MonoBehaviour
 
     public void SetInfoPanel(ProgramInfo info)
     {
-        StartCoroutine(GetData());
-        codeTxt.text = info.programName;
-        DateTime startDate = DateTime.Parse(info.startDate);
-        DateTime endDate = DateTime.Parse(info.endDate);
-        progresTxt.text = "ÁøÇà·ü: " + (100 * DateTime.Now.Subtract(startDate) / endDate.Subtract(startDate)).ToString("F2") + "%";
-        durationTxt.text = startDate.ToString("yyyy-MM-dd") + " ~ " + endDate.ToString("yyyy-MM-dd");
+        progresTxt.text = "";
+        rankTxt.text = "";
+        durationTxt.text = "";
+        StartCoroutine(GetData(info));
+        if (info != null)
+        {
+            //codeTxt.text = info.programName;
+            DateTime startDate = DateTime.Parse(info.startDate);
+            DateTime endDate = DateTime.Parse(info.endDate);
+            progresTxt.text = "ÁøÇà·ü: " + (100 * DateTime.Now.Subtract(startDate) / endDate.Subtract(startDate)).ToString("F2") + "%";
+            durationTxt.text = startDate.ToString("yyyy-MM-dd") + " ~ " + endDate.ToString("yyyy-MM-dd");
+        }
     }
 
-    IEnumerator GetData()
+    IEnumerator GetData(ProgramInfo info)
     {
-        yield return http.GetMethod("manage/program/get/current", (response) =>
-        {
-            programInfo = http.GetJsonData<ProgramInfo>(response);
-        });
+        yield return new WaitUntil(() => http != null);
+
         yield return http.GetMethod("manage/info/class", (response) =>
         {
             codeTxt.text = response;
@@ -54,10 +56,13 @@ public class InfoPanel : MonoBehaviour
             UserInfo temp = http.GetJsonData<UserInfo>(response);
             nameTxt.text = temp.name;
         });
-        yield return http.GetMethod("statistics/rank?programName=" + programInfo.programName, (response) =>
+        if (info != null)
         {
-            rankTxt.text = response + " µî!!";
-        });
+            yield return http.GetMethod("statistics/rank?programName=" + info.programName, (response) =>
+            {
+                rankTxt.text = response + " µî!!";
+            });
+        }
     }
 
     public void OpenClickPanel()
@@ -68,7 +73,7 @@ public class InfoPanel : MonoBehaviour
 
     public void CloseClickPanel()
     {
-        normalPanel?.SetActive(true);
-        clickPanel?.SetActive(false);
+        normalPanel.SetActive(true);
+        clickPanel.SetActive(false);
     }
 }

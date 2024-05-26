@@ -21,7 +21,7 @@ public class ProgramSettingScript : MonoBehaviour
     [SerializeField] TMP_InputField programNameIF;
     [SerializeField] DatePicker startDate, endDate;
 
-    private void Start()
+    void OnEnable()
     {
         http = HttpController.Instance();
         StartCoroutine(CheckProgram());
@@ -33,9 +33,9 @@ public class ProgramSettingScript : MonoBehaviour
         yield return http.GetMethod("manage/program/get/current", (response) =>
         {
             ProgramInfo programInfo = http.GetJsonData<ProgramInfo>(response);
-            if(programInfo != null)
+            infoPanel.SetInfoPanel(programInfo);
+            if (programInfo != null)
             {
-                infoPanel.SetInfoPanel(programInfo);
                 programPanel.SetActive(true);
                 gameObject.SetActive(false);
             }
@@ -67,6 +67,7 @@ public class ProgramSettingScript : MonoBehaviour
         yield return http.PostMethod("manage/program/create", programDataJson.ToString(), (respone) =>
         {
             StartCoroutine(CheckProgram());
+            programNameIF.text = "";
         });
     }
 
@@ -77,6 +78,7 @@ public class ProgramSettingScript : MonoBehaviour
         yield return http.PostMethod("manage/program/join", temp.ToString(), (response) =>
         {
             StartCoroutine(CheckProgram());
+            programNameIF.text = "";
         });
     }
 }

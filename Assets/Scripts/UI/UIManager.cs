@@ -25,25 +25,18 @@ public class UIManager : MonoBehaviour
         return instance;
     }
 
-    DateController dateController;
-    HttpController httpController;
-
     [SerializeField] GameObject StudentInfoPanel, TeacherInfoPanel;
+    [SerializeField] GameObject StudentSettingPanel, StudentStatPanel;
+    [SerializeField] GameObject TeacherSettingPanel, TeacherStatPanel;
     [SerializeField] GameObject LoginTab;
     [SerializeField] GameObject settingPanel;
-    [SerializeField] TMP_InputField addSwearInput;
-    [SerializeField] TMP_Text additionalSwearText;
-    [SerializeField] GameObject progressPanel;
-    [SerializeField] Image FrontCircle;
-    [SerializeField] TMP_Text percentText;
-    [SerializeField] GameObject analyzePanel;
-    [SerializeField] TMP_Text analyzeText;
-
-    private void Start()
-    {
-        dateController = DateController.Instance();
-        httpController = HttpController.Instance();
-    }
+    /*[SerializeField] TMP_InputField addSwearInput;
+    //[SerializeField] TMP_Text additionalSwearText;
+    //[SerializeField] GameObject progressPanel;
+    //[SerializeField] Image FrontCircle;
+    //[SerializeField] TMP_Text percentText;
+    //[SerializeField] GameObject analyzePanel;
+    //[SerializeField] TMP_Text analyzeText;*/
 
     public void SetInfoPanel(string role)
     {
@@ -67,7 +60,11 @@ public class UIManager : MonoBehaviour
     public void OpenLoginTab()
     {
         StudentInfoPanel.SetActive(false);
+        StudentSettingPanel.SetActive(true);
+        StudentStatPanel.SetActive(false);
         TeacherInfoPanel.SetActive(false);
+        TeacherSettingPanel.SetActive(true);
+        TeacherStatPanel.SetActive(false);
         LoginTab.SetActive(true);
     }
     
@@ -75,6 +72,8 @@ public class UIManager : MonoBehaviour
     {
         LoginTab.SetActive(false);
     }
+
+    /*
 
     public void PanelControll()
     {
@@ -164,4 +163,5 @@ public class UIManager : MonoBehaviour
         progressPanel.SetActive(false);
         analyzePanel.SetActive(false);
     }
+    */
 }

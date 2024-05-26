@@ -55,8 +55,17 @@ public class AudioRecorderController : MonoBehaviour
             // 녹음 시작을 호출하는 코드
             recorder.Call("startRecording");
             isRecord = true;
-            uiManager.OpenProgressPanel();
         }
+    }
+
+    public void RecordVoiceCheck()
+    {
+        recorder.Call("startVoiceCheck");
+    }
+
+    public void SendVoiceCheck()
+    {
+        recorder.Call("sendVoiceCheck");
     }
 
     public void StopRecording()
@@ -65,7 +74,6 @@ public class AudioRecorderController : MonoBehaviour
         {
             recorder.Call("endRecording");
             isRecord = false;
-            uiManager.OpenAnalizePanel();
         }
     }
 

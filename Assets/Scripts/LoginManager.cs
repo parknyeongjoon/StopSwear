@@ -6,6 +6,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
 
 public class LoginManager : MonoBehaviour
 {
@@ -66,6 +67,9 @@ public class LoginManager : MonoBehaviour
                 }
             }
         });
+
+        EmailIF.text = "";
+        PWDIF.text = "";
     }
 
     public void StartSignIn()
@@ -76,16 +80,21 @@ public class LoginManager : MonoBehaviour
     public IEnumerator SignUp()
     {
         bool emailExist = false;
-        JObject userDataJson = new JObject();
-        userDataJson["email"] = SUEmailIF.text;
-        userDataJson["password"] = GetSha256Hash(SUPWDIF.text);
-        userDataJson["name"] = SUuserNameIF.text;
+        string pattern = @"^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$";
+
+        if(!Regex.IsMatch(SUEmailIF.text, pattern)){
+            toast.showToast("이메일 형식을 확인해주세요.");
+            Debug.Log("이메일 형식");
+            SUEmailIF.text = "";
+            yield break;
+        }
 
         yield return httpController.GetMethod("auth/exists/email?email=" + SUEmailIF.text, (response) =>
         {
             if (response == "true")
             {
-                toast.showToast("이메일이 이미 존재합니다. 다른 이메일을 사용해주세요.");
+                toast.showToast("이메일이 이미 존재합니다.");
+                SUEmailIF.text = "";
                 emailExist = true;
             }
         });
@@ -95,6 +104,10 @@ public class LoginManager : MonoBehaviour
             yield break;
         }
 
+        JObject userDataJson = new JObject();
+        userDataJson["email"] = SUEmailIF.text;
+        userDataJson["password"] = GetSha256Hash(SUPWDIF.text);
+        userDataJson["name"] = SUuserNameIF.text;
 
         if (isTeacherToggle.isOn) // teacher
         {
@@ -105,6 +118,7 @@ public class LoginManager : MonoBehaviour
                 if (response == "false")
                 {
                     toast.showToast("학교 코드가 올바르지 않습니다.");
+                    SUCodeIF.text = "";
                     schoolIdExist = false;
                 }
             });
@@ -113,6 +127,7 @@ public class LoginManager : MonoBehaviour
                 if (response == "true")
                 {
                     toast.showToast("학급이름이 이미 존재합니다.");
+                    SUclassNameIF.text = "";
                     classIdExist = true;
                 }
             });
@@ -129,8 +144,6 @@ public class LoginManager : MonoBehaviour
 
             yield return httpController.PostMethod("auth/signup/teacher", userDataString, (response) =>
             {
-                toast.showToast("가입 성공");
-                CloseCheckPanel();
                 OpenSignInPanel();
             });
         }
@@ -141,6 +154,8 @@ public class LoginManager : MonoBehaviour
             {
                 if (response == "false")
                 {
+                    SUCodeIF.text = "";
+                    toast.showToast("학급 코드 인식 실패");
                     classIdExist = false;
                 }
             });
@@ -151,12 +166,34 @@ public class LoginManager : MonoBehaviour
 
             userDataJson["classId"] = SUCodeIF.text;
             string userDataString = userDataJson.ToString();
+
             yield return httpController.PostMethod("auth/signup/student", userDataString, (response) =>
             {
-                CloseCheckPanel();
-                OpenSignInPanel();
+                OpenCheckPanel();
             });
         }
+    }
+
+    Coroutine voiceCheckCoroutine = null;
+    public void RecordVoiceCheckBtn()
+    {
+        if(voiceCheckCoroutine == null)
+        {
+            StartCoroutine(RecordVoiceCheck());
+        }
+        else
+        {
+            Debug.Log("이미 녹음 중");
+        }
+    }
+
+    IEnumerator RecordVoiceCheck()
+    {
+        recorder.RecordVoiceCheck();
+        yield return new WaitForSeconds(10);
+        recorder.SendVoiceCheck();
+        OpenSignInPanel();
+        voiceCheckCoroutine = null;
     }
 
     public void StartSignUp()
@@ -210,6 +247,8 @@ public class LoginManager : MonoBehaviour
     public void OpenSignInPanel()
     {
         CloseAllPanel();
+        EmailIF.text = "";
+        PWDIF.text = "";
         SignInPanel.SetActive(true);
     }
 
@@ -222,6 +261,13 @@ public class LoginManager : MonoBehaviour
     public void OpenSignUpPanel()
     {
         CloseAllPanel();
+        SUclassNameIF.text = "";
+        SUCodeIF.text = "";
+        SUEmailIF.text = "";
+        SUPWDIF.text = "";
+        SUuserNameIF.text = "";
+        isTeacherToggle.isOn = false;
+        SUclassNameIF.gameObject.SetActive(false);
         SignUpPanel.SetActive(true);
     }
 
@@ -230,6 +276,7 @@ public class LoginManager : MonoBehaviour
         SignInPanel.SetActive(false);
         FindPWDPanel.SetActive(false);
         SignUpPanel.SetActive(false);
+        VoiceCheckPanel.SetActive(false);
     }
 
     #region signup
@@ -240,14 +287,7 @@ public class LoginManager : MonoBehaviour
 
     public void OpenCheckPanel()
     {
-        if (!isTeacherToggle.isOn)
-        {
-            VoiceCheckPanel.SetActive(true);
-        }
-        else
-        {
-            StartSignUp();
-        }
+        VoiceCheckPanel.SetActive(true);
     }
 
     public void CloseCheckPanel()
