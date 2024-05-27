@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InfoPanel : MonoBehaviour
 {
     HttpController http;
+    UIManager uiManager;
 
     [SerializeField] GameObject normalPanel, clickPanel;
     [SerializeField] TMP_Text nameTxt, codeTxt, progresTxt, rankTxt;
     [SerializeField] TMP_Text durationTxt;
+    [SerializeField] Button logoutBtn;
 
     class UserInfo
     {
@@ -21,6 +24,9 @@ public class InfoPanel : MonoBehaviour
     private void Start()
     {
         http = HttpController.Instance();
+        uiManager = UIManager.Instance();
+
+        logoutBtn.onClick.AddListener(uiManager.LogOut);
     }
 
     public void SetInfoPanel(ProgramInfo info)

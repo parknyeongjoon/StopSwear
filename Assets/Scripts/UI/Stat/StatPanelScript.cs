@@ -15,14 +15,9 @@ public class StatPanelScript : MonoBehaviour
 
     ProgramInfo programInfo;
 
-    void OnEnable()
-    {
-        http = HttpController.Instance();
-        StartCoroutine(SetPanel());
-    }
-
     void Start()
     {
+        http = HttpController.Instance();
         StartCoroutine(SetPanel());
     }
 
@@ -32,19 +27,14 @@ public class StatPanelScript : MonoBehaviour
         {
             programInfo = http.GetJsonData<ProgramInfo>(response);
             infoPanel.SetInfoPanel(programInfo);
-            SetStat(programInfo.programName);
+            OpenMyStat();
         });
-    }
-
-    public void SetStat(string programName)
-    {
-        myStat.SetMyStat(programInfo.programName);
-        groupStat.SetGroupStat(programInfo.programName);
     }
 
     public void OpenMyStat()
     {
         myStatPanel.SetActive(true);
+        myStat.SetMyStat(programInfo.programName);
         groupStatPanel.SetActive(false);
     }
 
@@ -52,5 +42,6 @@ public class StatPanelScript : MonoBehaviour
     {
         myStatPanel.SetActive(false);
         groupStatPanel.SetActive(true);
+        groupStat.SetGroupStat(programInfo.programName);
     }
 }

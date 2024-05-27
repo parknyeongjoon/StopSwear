@@ -15,6 +15,7 @@ public class AudioRecorderController : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
 

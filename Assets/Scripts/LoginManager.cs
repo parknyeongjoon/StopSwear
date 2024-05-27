@@ -1,12 +1,13 @@
 using Newtonsoft.Json.Linq;
 using System.Collections;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class LoginManager : MonoBehaviour
 {
@@ -58,13 +59,24 @@ public class LoginManager : MonoBehaviour
                     PlayerPrefs.SetString("Password", PWDIF.text);
                 }
 
-                uiManager.SetInfoPanel(responseToken["role"].ToString());
-                uiManager.CloseLoginTab();
+                //uiManager.SetInfoPanel(responseToken["role"].ToString());
+                uiManager.role = responseToken["role"].ToString();
+                //uiManager.CloseLoginTab();
                 if (responseToken["role"].ToString() == "STUDENT")
                 {
                     recorder.Set_JWT_TOKEN(responseToken["token"].ToString());
                     recorder.StartRecording();
+                    SceneManager.LoadSceneAsync("StudentStatScene");
+                    return;
                 }
+                else
+                {
+                    SceneManager.LoadSceneAsync("TeacherStatScene");
+                }
+            }
+            else
+            {
+                toast.showToast("로그인 실패");
             }
         });
 
@@ -215,22 +227,6 @@ public class LoginManager : MonoBehaviour
 
             return sBuilder.ToString();
         }
-    }
-
-    void SetUserInfo()
-    {
-        // 서버에서 받아와서 넣기
-        UserInfo userInfo = new UserInfo();
-    }
-
-    public void LogOut()
-    {
-        PlayerPrefs.SetInt("KeepLogin", 0);
-        PlayerPrefs.DeleteKey("Email");
-
-        uiManager.OpenLoginTab();
-        uiManager.SetInfoPanel(null);
-        OpenSignInPanel();
     }
     #endregion
 

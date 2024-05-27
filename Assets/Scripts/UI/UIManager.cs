@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     private static UIManager instance;
 
+    public string role;
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -25,11 +29,11 @@ public class UIManager : MonoBehaviour
         return instance;
     }
 
-    [SerializeField] GameObject StudentInfoPanel, TeacherInfoPanel;
-    [SerializeField] GameObject StudentSettingPanel, StudentStatPanel;
-    [SerializeField] GameObject TeacherSettingPanel, TeacherStatPanel;
-    [SerializeField] GameObject LoginTab;
-    [SerializeField] GameObject settingPanel;
+    //[SerializeField] GameObject StudentInfoPanel, TeacherInfoPanel;
+    //[SerializeField] GameObject StudentSettingPanel, StudentStatPanel;
+    //[SerializeField] GameObject TeacherSettingPanel, TeacherStatPanel;
+    //[SerializeField] GameObject LoginTab;
+    //[SerializeField] GameObject settingPanel;
     /*[SerializeField] TMP_InputField addSwearInput;
     //[SerializeField] TMP_Text additionalSwearText;
     //[SerializeField] GameObject progressPanel;
@@ -38,39 +42,47 @@ public class UIManager : MonoBehaviour
     //[SerializeField] GameObject analyzePanel;
     //[SerializeField] TMP_Text analyzeText;*/
 
-    public void SetInfoPanel(string role)
+    public void SetInfoPanel()
     {
-        if (role == "STUDENT")
-        {
-            TeacherInfoPanel.SetActive(false);
-            StudentInfoPanel.SetActive(true);
-        }
-        else if (role == "TEACHER" || role == "MANAGER")
-        {
-            StudentInfoPanel.SetActive(false);
-            TeacherInfoPanel.SetActive(true);
-        }
-        else
-        {
-            StudentInfoPanel.SetActive(false);
-            TeacherInfoPanel.SetActive(false);
-        }
+        //if (role == "STUDENT")
+        //{
+        //    TeacherInfoPanel.SetActive(false);
+        //    StudentInfoPanel.SetActive(true);
+        //}
+        //else if (role == "TEACHER" || role == "MANAGER")
+        //{
+        //    StudentInfoPanel.SetActive(false);
+        //    TeacherInfoPanel.SetActive(true);
+        //}
+        //else
+        //{
+        //    StudentInfoPanel.SetActive(false);
+        //    TeacherInfoPanel.SetActive(false);
+        //}
     }
 
-    public void OpenLoginTab()
-    {
-        StudentInfoPanel.SetActive(false);
-        StudentSettingPanel.SetActive(true);
-        StudentStatPanel.SetActive(false);
-        TeacherInfoPanel.SetActive(false);
-        TeacherSettingPanel.SetActive(true);
-        TeacherStatPanel.SetActive(false);
-        LoginTab.SetActive(true);
-    }
+    //public void OpenLoginTab()
+    //{
+    //    StudentInfoPanel.SetActive(false);
+    //    StudentSettingPanel.SetActive(true);
+    //    StudentStatPanel.SetActive(false);
+    //    TeacherInfoPanel.SetActive(false);
+    //    TeacherSettingPanel.SetActive(true);
+    //    TeacherStatPanel.SetActive(false);
+    //    LoginTab.SetActive(true);
+    //}
     
-    public void CloseLoginTab()
+    //public void CloseLoginTab()
+    //{
+    //    LoginTab.SetActive(false);
+    //}
+
+    public void LogOut()
     {
-        LoginTab.SetActive(false);
+        PlayerPrefs.SetInt("KeepLogin", 0);
+        PlayerPrefs.DeleteKey("Email");
+
+        SceneManager.LoadSceneAsync("LoginScene");
     }
 
     /*

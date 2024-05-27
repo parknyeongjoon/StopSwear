@@ -13,7 +13,6 @@ public class StudentGroupStatPanel : MonoBehaviour
     void Start()
     {
         http = HttpController.Instance();
-        
     }
 
     #region Utility
@@ -25,6 +24,7 @@ public class StudentGroupStatPanel : MonoBehaviour
 
     IEnumerator GetMyRank()
     {
+        yield return new WaitUntil(() => http != null);
         yield return http.GetMethod("statistics/rank", (response) =>
         {
             groupRankTxt.text = response + " / n µî";
@@ -33,6 +33,7 @@ public class StudentGroupStatPanel : MonoBehaviour
 
     IEnumerator GetGroupWords(string programName)
     {
+        yield return new WaitUntil(() => http != null);
         yield return http.GetMethod("statistics/count/word/group?programName=" + programName, (response) =>
         {
             List<WordData> wordDatas = JsonConvert.DeserializeObject<List<WordData>>(response);
