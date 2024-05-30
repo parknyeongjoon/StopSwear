@@ -39,7 +39,6 @@ public class HttpController : MonoBehaviour
 
     public void SetJwtToken(string token)
     {
-        Debug.Log("Set JWT Token - token: " + token);
         if (headers.ContainsKey("Authorization"))
         {
             headers["Authorization"] = "Bearer " + token;

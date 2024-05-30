@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -83,6 +84,15 @@ public class UIManager : MonoBehaviour
         PlayerPrefs.DeleteKey("Email");
 
         SceneManager.LoadSceneAsync("LoginScene");
+        AudioRecorderController.Instance().StopRecording();
+    }
+
+    public void SetClear(Transform parent)
+    {
+        for (int i = 0; i < parent.transform.childCount; i++)
+        {
+            Destroy(parent.transform.GetChild(i).gameObject);
+        }
     }
 
     /*

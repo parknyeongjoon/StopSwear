@@ -33,7 +33,6 @@ public class ToastController : MonoBehaviour
     void Start()
     {
         toaster = new AndroidJavaClass("com.example.unityplugin.ToastPlugin");
-        if(toaster != null) { Debug.Log("plugin ºñ¾úÀ½"); }
         _instance = toaster.CallStatic<AndroidJavaObject>("instance");
     }
 

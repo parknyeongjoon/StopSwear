@@ -13,6 +13,12 @@ public class DetailsPanelScript : MonoBehaviour
     {
         SetClear();
 
+        int max = 0;
+        foreach(var wordData in wordDatas)
+        {
+            if(max < wordData.count) { max = wordData.count; }
+        }
+
         for (int i = 0; i < wordDatas.Count; i++)
         {
             WordData wordData = wordDatas[i];
@@ -24,7 +30,8 @@ public class DetailsPanelScript : MonoBehaviour
 
             texts[0].text = (i + 1) + ". ";
             texts[1].text = wordData.word + "(" + wordData.count + ")";
-            image.fillAmount = (float)wordData.count / 10;
+            image.fillAmount = (float)wordData.count / max;
+            image.color = new Color(Random.Range(0.0f,1.0f), Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f));
         }
     }
 

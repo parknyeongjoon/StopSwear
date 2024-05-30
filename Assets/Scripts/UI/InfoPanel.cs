@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,12 +16,6 @@ public class InfoPanel : MonoBehaviour
     [SerializeField] TMP_Text nameTxt, codeTxt, progresTxt, rankTxt;
     [SerializeField] TMP_Text durationTxt;
     [SerializeField] Button logoutBtn;
-
-    class UserInfo
-    {
-        public string name;
-        public string email;
-    }
 
     private void Start()
     {
@@ -34,6 +30,7 @@ public class InfoPanel : MonoBehaviour
         progresTxt.text = "";
         rankTxt.text = "";
         durationTxt.text = "";
+        codeTxt.text = "";
         StartCoroutine(GetData(info));
         if (info != null)
         {
@@ -53,10 +50,14 @@ public class InfoPanel : MonoBehaviour
         {
             codeTxt.text = response;
         });
-        yield return http.GetMethod("manage/code/class", (response) =>
+        if (uiManager.role == "TEACHER" || uiManager.role == "MANAGER")
         {
-            codeTxt.text += " - " + response;
-        });
+            yield return http.GetMethod("manage/code/class", (response) =>
+            {
+                if (response == null || response == "") { return; }
+                codeTxt.text += " - " + response;
+            });
+        }
         yield return http.GetMethod("manage/info/user", (response) =>
         {
             UserInfo temp = http.GetJsonData<UserInfo>(response);
@@ -64,10 +65,18 @@ public class InfoPanel : MonoBehaviour
         });
         if (info != null)
         {
-            yield return http.GetMethod("statistics/rank?programName=" + info.programName, (response) =>
+            if(uiManager.role == "STUDENT")
             {
-                rankTxt.text = response + " 등!!";
-            });
+                yield return http.GetMethod("statistics/rank?programName=" + info.programName, (response) =>
+                {
+                    rankTxt.text = response + " 등!!";
+                });
+            }
+            else if (uiManager.role == "TEACHER" || uiManager.role == "MANAGER")
+            {
+                rankTxt.text = "요주의 인물: ";
+            }
+            
         }
     }
 

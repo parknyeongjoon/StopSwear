@@ -6,13 +6,6 @@ using TMPro;
 using UI.Dates;
 using UnityEngine;
 
-public class ProgramInfo
-{
-    public string programName;
-    public string startDate;
-    public string endDate;
-}
-
 public class ProgramSettingScript : MonoBehaviour
 {
     HttpController http;

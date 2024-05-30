@@ -28,9 +28,15 @@ public class LineGraphScript : MonoBehaviour
         http = HttpController.Instance();
     }
 
-    public IEnumerator GetWordsByDay(string programName)
+    public IEnumerator GetWordsByDay(string programName, int id)
     {
-        yield return http.GetMethod("statistics/count/daily/group?programName=" + programName, (response) =>
+        string query = "statistics/count/daily";
+        if (id != 0)
+        {
+            query += "/" + id.ToString();
+        }
+        query += "?programName=" + programName;
+        yield return http.GetMethod(query, (response) =>
         {
             WordsByProgram wordsByDay = http.GetJsonData<WordsByProgram>(response);
 

@@ -27,38 +27,48 @@ public class WordsScript : MonoBehaviour
         http = HttpController.Instance();
     }
 
-    public IEnumerator SetWordsGraph(DateTime date)
+    public IEnumerator SetWordsGraph(DateTime date, int id)
     {
-        yield return http.GetMethod("statistics/count/word?date=" + date.ToString("yyyy-MM-dd"), (response) =>
+        string query = "statistics/count/word";
+        if(id != 0)
+        {
+            query += "/" + id.ToString();
+        }
+        query += "?date=" + date.ToString("yyyy-MM-dd");
+        yield return http.GetMethod(query, (response) =>
         {
             List<WordData> wordDatas = JsonConvert.DeserializeObject<List<WordData>>(response);
 
-            if(wordDatas.Count > 0)
+            if(response == null || wordDatas.Count <= 0)
+            {
+                mostWord.text = "욕설 사용 안 함!! bb";
+                details.SetClear();
+            }
+            else
             {
                 mostWord.text = wordDatas[0].word + "(" + wordDatas[0].count + ")";
                 details.SetDetails(wordDatas);
             }
-            else
-            {
-                mostWord.text = "욕설 사용 안 함!! bb";
-                details.SetClear();
-            }
         });
     }
 
-    public IEnumerator SetProgramGraph(string programName)
+    public IEnumerator SetProgramGraph(string programName, int id)
     {
-        yield return http.GetMethod("statistics/most-used/program?programName=" + programName, (response) =>
+        string query = "statistics/most-used/program";
+        if(id != 0)
         {
-            if (response != null)
+            query += "/" + id.ToString();
+        }
+        query += "?programName=" + programName;
+        yield return http.GetMethod(query, (response) =>
+        {
+            if (response == null || response == "")
             {
-                mostWord.text = response;
-                //details.SetDetails(wordDatas);
+                mostWord.text = "욕설 사용 안 함!! bb";
             }
             else
             {
-                mostWord.text = "욕설 사용 안 함!! bb";
-                details.SetClear();
+                mostWord.text = response;
             }
         });
     }

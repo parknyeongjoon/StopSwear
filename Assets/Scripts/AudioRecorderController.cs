@@ -59,16 +59,6 @@ public class AudioRecorderController : MonoBehaviour
         }
     }
 
-    public void RecordVoiceCheck()
-    {
-        recorder.Call("startVoiceCheck");
-    }
-
-    public void SendVoiceCheck()
-    {
-        recorder.Call("sendVoiceCheck");
-    }
-
     public void StopRecording()
     {
         if (isRecord)
@@ -76,6 +66,18 @@ public class AudioRecorderController : MonoBehaviour
             recorder.Call("endRecording");
             isRecord = false;
         }
+    }
+
+    public void RecordVoiceCheck()
+    {
+        Debug.Log("체크 보이스 시작");
+        recorder.Call("startVoiceCheck");
+    }
+
+    public void SendVoiceCheck()
+    {
+        Debug.Log("체크 보이스 전송");
+        recorder.Call("sendVoiceCheck");
     }
 
     ///
