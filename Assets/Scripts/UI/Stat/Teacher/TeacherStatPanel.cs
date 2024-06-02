@@ -56,21 +56,20 @@ public class TeacherStatPanel : MonoBehaviour
 
             foreach (UserInfo student in studentList)
             {
-                StartCoroutine(SetStudentCard(student));
+                StartCoroutine(SetStudentCard(programName, student));
             }
         });
     }
 
-    IEnumerator SetStudentCard(UserInfo student)
+    IEnumerator SetStudentCard(string programName, UserInfo student)
     {
         string rank = "-1", total_count ="temp", most_word="temp";
         GameObject studentCardObj = Instantiate(studentCard, memberContent.transform);
-        yield return http.GetMethod("statistics/rank/" + student.id, (response) =>
+        yield return http.GetMethod("statistics/rank/" + student.id + "?programName=" + programName + "&date=null", (response) =>
         {
-            Debug.Log(response);
             rank = response;
         });
-        yield return http.GetMethod("statistics/most-used/program/" + student.id, (response) =>
+        yield return http.GetMethod("statistics/most-used/program/" + student.id + "?programName=" + programName, (response) =>
         {
             if (response == null || response == "")
             {

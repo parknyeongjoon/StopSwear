@@ -29,6 +29,7 @@ public class WordsScript : MonoBehaviour
 
     public IEnumerator SetWordsGraph(DateTime date, int id)
     {
+        yield return new WaitUntil(() => http != null);
         string query = "statistics/count/word";
         if(id != 0)
         {
@@ -54,6 +55,7 @@ public class WordsScript : MonoBehaviour
 
     public IEnumerator SetProgramGraph(string programName, int id)
     {
+        yield return new WaitUntil(() => http != null);
         string query = "statistics/most-used/program";
         if(id != 0)
         {

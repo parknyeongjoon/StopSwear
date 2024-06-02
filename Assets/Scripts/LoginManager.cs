@@ -235,6 +235,8 @@ public class LoginManager : MonoBehaviour
     [SerializeField] TMP_InputField EmailIF, PWDIF, userNameIF;
     [SerializeField] Toggle keepLoginToggle;
     [SerializeField] GameObject FindPWDPanel;
+    [SerializeField] TMP_InputField FEmailIF, FuserNameIF;
+    [SerializeField] TMP_Text FResultTxt;
     [SerializeField] GameObject SignUpPanel;
     [SerializeField] TMP_InputField SUEmailIF, SUPWDIF, SUuserNameIF, SUCodeIF, SUclassNameIF;
     [SerializeField] Toggle isTeacherToggle;
@@ -250,6 +252,9 @@ public class LoginManager : MonoBehaviour
 
     public void OpenFindPWDPanel()
     {
+        FEmailIF.text = "";
+        FuserNameIF.text = "";
+        FResultTxt.text = "";
         CloseAllPanel();
         FindPWDPanel.SetActive(true);
     }

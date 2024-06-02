@@ -30,6 +30,7 @@ public class LineGraphScript : MonoBehaviour
 
     public IEnumerator GetWordsByDay(string programName, int id)
     {
+        yield return new WaitUntil(() => http != null);
         string query = "statistics/count/daily";
         if (id != 0)
         {
@@ -76,7 +77,7 @@ public class LineGraphScript : MonoBehaviour
             {
                 height = -60;
             }
-            tempRect.anchoredPosition = new Vector2(tempRect.position.x, 120 + height);
+            tempRect.anchoredPosition = new Vector2(0, 120 + height);
         }
     }
 
