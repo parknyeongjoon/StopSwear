@@ -65,7 +65,7 @@ public class TeacherStatPanel : MonoBehaviour
     {
         string rank = "-1", total_count ="temp", most_word="temp";
         GameObject studentCardObj = Instantiate(studentCard, memberContent.transform);
-        yield return http.GetMethod("statistics/rank/" + student.id + "?programName=" + programName + "&date=null", (response) =>
+        yield return http.GetMethod("statistics/rank/" + student.id + "?programName=" + programName, (response) =>
         {
             rank = response;
         });
@@ -79,7 +79,11 @@ public class TeacherStatPanel : MonoBehaviour
             {
                 most_word = response;
             }
-
+        });
+        yield return http.GetMethod("statistics/count/daily/" + student.id + "?programName=" + programName, (response) =>
+        {
+            WordsByProgram data = http.GetJsonData<WordsByProgram>(response);
+            total_count = data.sum.ToString();
         });
         studentCardObj.GetComponent<StudentCard>().SetText(student.name, rank, total_count, most_word);
         studentCardObj.GetComponent<Button>().onClick.AddListener(() => OpenOneStat(student.id));
@@ -89,7 +93,7 @@ public class TeacherStatPanel : MonoBehaviour
     {
         memberPanel.SetActive(false);
         oneStatPanel.SetActive(true);
-        oneStat.SetMyStat(programInfo.programName, id);
+        oneStat.SetMyStat(programInfo, id);
         groupStatPanel.SetActive(false);
     }
 
@@ -98,6 +102,6 @@ public class TeacherStatPanel : MonoBehaviour
         memberPanel.SetActive(false);
         oneStatPanel.SetActive(false);
         groupStatPanel.SetActive(true);
-        groupStat.SetGroupStat(programInfo.programName);
+        groupStat.SetGroupStat(programInfo);
     }
 }

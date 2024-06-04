@@ -9,11 +9,11 @@ public class StudentMyStatPanel : MonoBehaviour
     int id = 0;
     #region Utility
     // 0 넣으면 자기 자신의 스탯, id 값 넣으면 그 id 유저의 스탯
-    public void SetMyStat(string programName, int _id)
+    public void SetMyStat(ProgramInfo program, int _id)
     {
         if(_id != 0) { id = _id;}
-        StartCoroutine(mostWordByProgram.SetProgramGraph(programName, id));
-        StartCoroutine(wordsByProgram.GetWordsByDay(programName, id));
+        StartCoroutine(mostWordByProgram.SetProgramGraph(program, id));
+        StartCoroutine(wordsByProgram.GetWordsByDay(program, id));
     }
 
     IEnumerator GetDataByDate(DateTime date)

@@ -38,6 +38,7 @@ public class WordsScript : MonoBehaviour
         query += "?date=" + date.ToString("yyyy-MM-dd");
         yield return http.GetMethod(query, (response) =>
         {
+            Debug.Log(response);
             List<WordData> wordDatas = JsonConvert.DeserializeObject<List<WordData>>(response);
 
             if(response == null || wordDatas.Count <= 0)
@@ -53,24 +54,29 @@ public class WordsScript : MonoBehaviour
         });
     }
 
-    public IEnumerator SetProgramGraph(string programName, int id)
+    public IEnumerator SetProgramGraph(ProgramInfo program, int id)
     {
         yield return new WaitUntil(() => http != null);
-        string query = "statistics/most-used/program";
+        string query = "statistics/count/word/program";
         if(id != 0)
         {
             query += "/" + id.ToString();
         }
-        query += "?programName=" + programName;
+        query += "?programName=" + program.programName;
         yield return http.GetMethod(query, (response) =>
         {
-            if (response == null || response == "")
+            Debug.Log(response);
+            List<WordData> wordDatas = JsonConvert.DeserializeObject<List<WordData>>(response);
+
+            if (response == null || response == "" || wordDatas.Count <= 0)
             {
                 mostWord.text = "욕설 사용 안 함!! bb";
+                details.SetClear();
             }
             else
             {
-                mostWord.text = response;
+                mostWord.text = wordDatas[0].word + "(" + wordDatas[0].count + ")";
+                details.SetDetails(wordDatas);
             }
         });
     }

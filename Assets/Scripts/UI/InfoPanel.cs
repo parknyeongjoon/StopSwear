@@ -34,7 +34,6 @@ public class InfoPanel : MonoBehaviour
         StartCoroutine(GetData(info));
         if (info != null)
         {
-            //codeTxt.text = info.programName;
             DateTime startDate = DateTime.Parse(info.startDate);
             DateTime endDate = DateTime.Parse(info.endDate);
             progresTxt.text = "ÁøÇà·ü: " + (100 * DateTime.Now.Subtract(startDate) / endDate.Subtract(startDate)).ToString("F2") + "%";
@@ -62,6 +61,10 @@ public class InfoPanel : MonoBehaviour
         {
             UserInfo temp = http.GetJsonData<UserInfo>(response);
             nameTxt.text = temp.name;
+            if(uiManager.role == "TEACHER")
+            {
+                nameTxt.text += " ¼±»ý´Ô";
+            }
         });
         if (info != null)
         {
@@ -69,6 +72,7 @@ public class InfoPanel : MonoBehaviour
             {
                 yield return http.GetMethod("statistics/rank?programName=" + info.programName, (response) =>
                 {
+                    Debug.Log(response);
                     rankTxt.text = response + " µî!!";
                 });
             }

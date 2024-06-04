@@ -37,14 +37,28 @@ public class StudentReviewPanel : MonoBehaviour
     IEnumerator SetProgramCard(ProgramInfo program)
     {
         string rank = "-1", total_count = "total", most_word = "most";
-        //yield return http.GetMethod("rank")
+        yield return http.GetMethod("statistics/rank?programName=" + program.programName, (response) =>
+        {
+            rank = response;
+        });
         yield return http.GetMethod("statistics/most-used/program?programName=" + program.programName, (response) =>
         {
-            most_word = response;
+            if (response == null || response == "")
+            {
+                most_word = "¿å¼³ »ç¿ë x";
+            }
+            else
+            {
+                most_word = response;
+            }
         });
-        //yield return http.GetMethod("total_cout")
+        yield return http.GetMethod("statistics/count/daily?programName=" + program.programName, (response) =>
+        {
+            WordsByProgram data = http.GetJsonData<WordsByProgram>(response);
+            total_count = data.sum.ToString();
+        });
         GameObject cardObj = Instantiate(programCard, programContent.transform);
-        cardObj.GetComponent<ProgramCard>().SetText(program.programName, rank, program.startDate, program.endDate, total_count, most_word);
+        cardObj.GetComponent<ProgramCard>().SetText(program.programName, rank, program.startDate, program.endDate, total_count, most_word, "");
         cardObj.GetComponent<Button>().onClick.AddListener(() => OpenReviewScroll(program));
     }
 

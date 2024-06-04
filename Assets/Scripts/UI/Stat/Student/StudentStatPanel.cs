@@ -33,7 +33,7 @@ public class StudnetStatPanel : MonoBehaviour
     public void OpenMyStat()
     {
         myStatPanel.SetActive(true);
-        myStat.SetMyStat(programInfo.programName, 0);
+        myStat.SetMyStat(programInfo, 0);
         groupStatPanel.SetActive(false);
     }
 
@@ -41,6 +41,6 @@ public class StudnetStatPanel : MonoBehaviour
     {
         myStatPanel.SetActive(false);
         groupStatPanel.SetActive(true);
-        groupStat.SetGroupStat(programInfo.programName);
+        groupStat.SetGroupStat(programInfo);
     }
 }

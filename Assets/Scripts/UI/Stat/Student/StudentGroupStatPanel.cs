@@ -16,25 +16,27 @@ public class StudentGroupStatPanel : MonoBehaviour
     }
 
     #region Utility
-    public void SetGroupStat(string programName)
+    public void SetGroupStat(ProgramInfo program)
     {
-        StartCoroutine(GetMyRank(programName));
-        StartCoroutine(GetGroupWords(programName));
+        StartCoroutine(GetMyRank(program));
+        StartCoroutine(rankGraph.GetRanksByDate(program));
+        StartCoroutine(GetGroupWords(program));
     }
 
-    IEnumerator GetMyRank(string programName)
+    IEnumerator GetMyRank(ProgramInfo program)
     {
         yield return new WaitUntil(() => http != null);
-        yield return http.GetMethod("statistics/rank?programName=" + programName, (response) =>
+        // group rank 추가
+        yield return http.GetMethod("statistics/rank?programName=" + program.programName, (response) =>
         {
-            groupRankTxt.text = response + " / n 등";
+            myRankTxt.text = response + " / n 등";
         });
     }
 
-    IEnumerator GetGroupWords(string programName)
+    IEnumerator GetGroupWords(ProgramInfo program)
     {
         yield return new WaitUntil(() => http != null);
-        yield return http.GetMethod("statistics/count/word/group?programName=" + programName, (response) =>
+        yield return http.GetMethod("statistics/count/word/group?programName=" + program.programName, (response) =>
         {
             List<WordData> wordDatas = JsonConvert.DeserializeObject<List<WordData>>(response);
             detailGraph.SetDetails(wordDatas);
@@ -44,7 +46,7 @@ public class StudentGroupStatPanel : MonoBehaviour
     #endregion
 
     #region UI
-    [SerializeField] TMP_Text groupRankTxt;
+    [SerializeField] TMP_Text groupRankTxt, myRankTxt;
     [SerializeField] LineGraphScript rankGraph;
     [SerializeField] CircleGraphScript groupWordsCircleGraph;
     [SerializeField] DetailsPanelScript detailGraph;

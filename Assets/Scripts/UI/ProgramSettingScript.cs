@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UI.Dates;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProgramSettingScript : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class ProgramSettingScript : MonoBehaviour
     [SerializeField] InfoPanel infoPanel;
     [SerializeField] TMP_InputField programNameIF;
     [SerializeField] DatePicker startDate, endDate;
+    [SerializeField] Button infoClickBtn;
 
     void OnEnable()
     {
@@ -29,8 +31,13 @@ public class ProgramSettingScript : MonoBehaviour
             infoPanel.SetInfoPanel(programInfo);
             if (programInfo != null)
             {
+                if(UIManager.Instance().role == "STUDENT")
+                {
+                    AudioRecorderController.Instance().StartRecording();
+                }
                 programPanel.SetActive(true);
                 gameObject.SetActive(false);
+                infoClickBtn.interactable = true;
             }
         });
     }

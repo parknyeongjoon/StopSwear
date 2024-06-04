@@ -19,8 +19,8 @@ public class StudentReviewScroll : MonoBehaviour
     {
         SetProgramInfo(info);
 
-        StartCoroutine(mostWordByProgram.SetProgramGraph(info.programName, id));
-        StartCoroutine(wordsByProgram.GetWordsByDay(info.programName, id));
+        StartCoroutine(mostWordByProgram.SetProgramGraph(info, id));
+        StartCoroutine(wordsByProgram.GetWordsByDay(info, id));
 
         StartCoroutine(GetRank(info.programName));
         StartCoroutine(GetGroupWords(info.programName));

@@ -70,13 +70,11 @@ public class AudioRecorderController : MonoBehaviour
 
     public void RecordVoiceCheck()
     {
-        Debug.Log("체크 보이스 시작");
         recorder.Call("startVoiceCheck");
     }
 
     public void SendVoiceCheck()
     {
-        Debug.Log("체크 보이스 전송");
         recorder.Call("sendVoiceCheck");
     }
 

@@ -45,6 +45,8 @@ public class TimeGrpahScript : MonoBehaviour
         query += "?date=" + date.ToString("yyyy-MM-dd");
         yield return http.GetMethod(query, (response) =>
         {
+            min.gameObject.SetActive(true);
+
             WordsByTimeData temp = JsonUtility.FromJson<WordsByTimeData>(response);
             
             if (response == null || temp.max <= 0)
@@ -73,7 +75,8 @@ public class TimeGrpahScript : MonoBehaviour
                         }
                         else
                         {
-                            height = (high - low) / 2;
+                            height = high - low;
+                            min.gameObject.SetActive(false);
                         }
                         if (timeDatas[i].count == 0)
                         {

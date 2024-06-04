@@ -31,6 +31,11 @@ public class LoginManager : MonoBehaviour
         EmailIF.text = PlayerPrefs.GetString("");
     }
 
+    public void StartSignIn()
+    {
+        StartCoroutine(SignIn());
+    }
+
     public IEnumerator SignIn()
     {
         string email = EmailIF.text;
@@ -65,7 +70,7 @@ public class LoginManager : MonoBehaviour
                 if (responseToken["role"].ToString() == "STUDENT")
                 {
                     recorder.Set_JWT_TOKEN(responseToken["token"].ToString());
-                    recorder.StartRecording();
+                    //recorder.StartRecording();
                     SceneManager.LoadSceneAsync("StudentStatScene");
                     return;
                 }
@@ -84,23 +89,19 @@ public class LoginManager : MonoBehaviour
         PWDIF.text = "";
     }
 
-    public void StartSignIn()
+    public void StartSignUp()
     {
-        StartCoroutine(SignIn());
+        StartCoroutine(SignUp());
     }
 
     public IEnumerator SignUp()
     {
-        bool emailExist = false;
-        string pattern = @"^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$";
-
-        if(!Regex.IsMatch(SUEmailIF.text, pattern)){
-            toast.showToast("이메일 형식을 확인해주세요.");
-            Debug.Log("이메일 형식");
-            SUEmailIF.text = "";
+        // email validation
+        if (!isValidEmail(SUEmailIF.text))
+        {
             yield break;
         }
-
+        bool emailExist = false;
         yield return httpController.GetMethod("auth/exists/email?email=" + SUEmailIF.text, (response) =>
         {
             if (response == "true")
@@ -110,11 +111,10 @@ public class LoginManager : MonoBehaviour
                 emailExist = true;
             }
         });
+        if (emailExist) { yield break; }
 
-        if (emailExist)
-        {
-            yield break;
-        }
+        // password validation
+        if (!IsValidPassword(SUPWDIF.text)) { yield break; }
 
         JObject userDataJson = new JObject();
         userDataJson["email"] = SUEmailIF.text;
@@ -186,6 +186,67 @@ public class LoginManager : MonoBehaviour
         }
     }
 
+    bool isValidEmail(string email)
+    {
+        string pattern = @"^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$";
+
+        if (!Regex.IsMatch(SUEmailIF.text, pattern))
+        {
+            toast.showToast("이메일 형식을 확인해주세요.");
+            Debug.Log("이메일 형식");
+            SUEmailIF.text = "";
+            return false;
+        }
+
+        return true;
+    }
+
+    bool IsValidPassword(string password)
+    {
+        if (password.Length < 8)
+        {
+            toast.showToast("Password must be at least 8 characters long.");
+            Debug.Log("길이 부족");
+            return false;
+        }
+
+        if (!Regex.IsMatch(password, @"[A-Z]"))
+        {
+            toast.showToast("Password must contain at least one uppercase letter.");
+            Debug.Log("대문자 X");
+            return false;
+        }
+
+        if (!Regex.IsMatch(password, @"[a-z]"))
+        {
+            toast.showToast("Password must contain at least one lowercase letter.");
+            Debug.Log("소문자 x");
+            return false;
+        }
+
+        if (!Regex.IsMatch(password, @"[0-9]"))
+        {
+            toast.showToast("Password must contain at least one number.");
+            Debug.Log("숫자 x");
+            return false;
+        }
+
+        if (!Regex.IsMatch(password, @"[\W_]"))
+        {
+            toast.showToast("Password must contain at least one special character.");
+            Debug.Log("특수 문자 x");
+            return false;
+        }
+
+        if(SUPWDIF.text != SUPWDCheckIF.text)
+        {
+            toast.showToast("Password check is not correct");
+            Debug.Log("비밀 번호 일치 x");
+            return false;
+        }
+        return true;
+    }
+
     Coroutine voiceCheckCoroutine = null;
     public void RecordVoiceCheckBtn()
     {
@@ -202,15 +263,23 @@ public class LoginManager : MonoBehaviour
     IEnumerator RecordVoiceCheck()
     {
         recorder.RecordVoiceCheck();
-        yield return new WaitForSeconds(10);
+
+        float time = 0.0f;
+        RecordingProgressImg.gameObject.SetActive(true);
+
+        while (true)
+        {
+
+            time += Time.deltaTime;
+            RecordingProgressImg.fillAmount = time / 10;
+            if(time > 10.0f) { break; }
+            yield return null;
+        }
+        RecordingProgressImg.fillAmount = 0;
+
         recorder.SendVoiceCheck();
         OpenSignInPanel();
         voiceCheckCoroutine = null;
-    }
-
-    public void StartSignUp()
-    {
-        StartCoroutine(SignUp());
     }
 
     string GetSha256Hash(string input)
@@ -238,9 +307,10 @@ public class LoginManager : MonoBehaviour
     [SerializeField] TMP_InputField FEmailIF, FuserNameIF;
     [SerializeField] TMP_Text FResultTxt;
     [SerializeField] GameObject SignUpPanel;
-    [SerializeField] TMP_InputField SUEmailIF, SUPWDIF, SUuserNameIF, SUCodeIF, SUclassNameIF;
+    [SerializeField] TMP_InputField SUEmailIF, SUPWDIF, SUPWDCheckIF, SUuserNameIF, SUCodeIF, SUclassNameIF;
     [SerializeField] Toggle isTeacherToggle;
     [SerializeField] GameObject VoiceCheckPanel;
+    [SerializeField] Image RecordingProgressImg;
 
     public void OpenSignInPanel()
     {

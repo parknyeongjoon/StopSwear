@@ -40,14 +40,31 @@ public class TeacherReviewPanel : MonoBehaviour
     IEnumerator SetProgramCard(ProgramInfo program)
     {
         string rank = "-1", total_count = "total", most_word = "most";
-        //yield return http.GetMethod("rank")
-        yield return http.GetMethod("statistics/most-used/program?" + program.programName, (response) =>
+        int total_member_count = -1;
+        yield return http.GetMethod("statistics/count/word/group?programName=" + program.programName, (response) =>
         {
-            most_word = response;
+            List<WordData> wordDatas = JsonConvert.DeserializeObject<List<WordData>>(response);
+            if(wordDatas.Count <= 0)
+            {
+                most_word = "¿å¼³ »ç¿ë x";
+            }
+            else
+            {
+                most_word = wordDatas[0].word;
+            }
         });
-        //yield return http.GetMethod("total_cout")
+        yield return http.GetMethod("statistics/count/daily/group?programName=" + program.programName, (response) =>
+        {
+            WordsByProgram data = http.GetJsonData<WordsByProgram>(response);
+            total_count = data.sum.ToString();
+        });
+        yield return http.GetMethod("manage/students/program?programName=" + program.programName, (response) =>
+        {
+            List<UserInfo> userInfos = JsonConvert.DeserializeObject<List<UserInfo>>(response);
+            total_member_count = userInfos.Count;
+        });
         GameObject cardObj = Instantiate(programCard, programContent.transform);
-        cardObj.GetComponent<ProgramCard>().SetText(program.programName, rank, program.startDate, program.endDate, total_count, most_word);
+        cardObj.GetComponent<ProgramCard>().SetText(program.programName, rank, program.startDate, program.endDate, total_count, most_word, total_member_count.ToString());
         cardObj.GetComponent<Button>().onClick.AddListener(() => OpenMemberPanelBtn(program));
     }
 
@@ -82,11 +99,11 @@ public class TeacherReviewPanel : MonoBehaviour
         Debug.Log(student.name);
         string rank = "-1", total_count = "temp", most_word = "temp";
         GameObject studentCardObj = Instantiate(studentCard, memberContent.transform);
-        yield return http.GetMethod("statistics/rank/" + student.id, (response) =>
+        yield return http.GetMethod("statistics/rank/" + student.id + "?programName=" + program.programName, (response) =>
         {
             rank = response;
         });
-        yield return http.GetMethod("statistics/most-used/program/" + student.id, (response) =>
+        yield return http.GetMethod("statistics/most-used/program/" + student.id + "?programName=" + program.programName, (response) =>
         {
             if (response == null || response == "")
             {
@@ -96,7 +113,11 @@ public class TeacherReviewPanel : MonoBehaviour
             {
                 most_word = response;
             }
-
+        });
+        yield return http.GetMethod("statistics/count/daily/" + student.id + "?programName=" + program.programName, (response) =>
+        {
+            WordsByProgram data = http.GetJsonData<WordsByProgram>(response);
+            total_count = data.sum.ToString() + "È¸";
         });
         studentCardObj.GetComponent<StudentCard>().SetText(student.name, rank, total_count, most_word);
         studentCardObj.GetComponent<Button>().onClick.AddListener(() => OpenReviewScroll(program, student.id));

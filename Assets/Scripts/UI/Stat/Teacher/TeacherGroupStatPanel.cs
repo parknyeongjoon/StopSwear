@@ -13,18 +13,17 @@ public class TeacherGroupStatPanel : MonoBehaviour
     }
 
     #region Utility
-    public void SetGroupStat(string programName)
+    public void SetGroupStat(ProgramInfo program)
     {
         //StartCoroutine(GetMyRank(programName));
-        StartCoroutine(GetGroupWords(programName));
+        StartCoroutine(GetGroupWords(program));
     }
 
-    IEnumerator GetGroupWords(string programName)
+    IEnumerator GetGroupWords(ProgramInfo program)
     {
         yield return new WaitUntil(() => http != null);
-        yield return http.GetMethod("statistics/count/word/group?programName=" + programName, (response) =>
+        yield return http.GetMethod("statistics/count/word/group?programName=" + program.programName, (response) =>
         {
-            Debug.Log(response);
             List<WordData> wordDatas = JsonConvert.DeserializeObject<List<WordData>>(response);
             detailGraph.SetDetails(wordDatas);
             circleGraph.SetCircleGraph(wordDatas);
