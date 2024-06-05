@@ -8,6 +8,8 @@ using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using System;
+using System.IO;
 
 public class LoginManager : MonoBehaviour
 {
@@ -27,6 +29,7 @@ public class LoginManager : MonoBehaviour
     #region utility
 
     bool isVoiceCheck = false;
+    string base64EncodedData;
 
     void AutoSignIn() // 나중에 하기
     {
@@ -179,13 +182,14 @@ public class LoginManager : MonoBehaviour
                 yield break;
             }
 
-            userDataJson["classId"] = SUCodeIF.text;
-            string userDataString = userDataJson.ToString();
-
             OpenCheckPanel();
 
             yield return new WaitUntil(() => isVoiceCheck);
-            
+
+            userDataJson["voice"] = base64EncodedData;
+            userDataJson["classId"] = SUCodeIF.text;
+            string userDataString = userDataJson.ToString();
+
             yield return httpController.PostMethod("auth/signup/student", userDataString, (response) =>
             {
                 OpenSignInPanel();
@@ -284,8 +288,22 @@ public class LoginManager : MonoBehaviour
         }
         RecordingProgressImg.fillAmount = 0;
 
-        recorder.SendVoiceCheck();
         isVoiceCheck = true;
+        recorder.StopVoiceCheck();
+
+        string storagePath = Application.persistentDataPath;
+        string filePath = Path.Combine(storagePath, "recording_voice_check.m4a");
+
+        try
+        {
+            byte[] data = File.ReadAllBytes(filePath);
+            base64EncodedData = Convert.ToBase64String(data);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Failed to read file or encode to Base64: " + e.Message);
+        }
+
         voiceCheckCoroutine = null;
     }
 
@@ -343,6 +361,7 @@ public class LoginManager : MonoBehaviour
         SUCodeIF.text = "";
         SUEmailIF.text = "";
         SUPWDIF.text = "";
+        SUPWDCheckIF.text = "";
         SUuserNameIF.text = "";
         isTeacherToggle.isOn = false;
         SUclassNameIF.gameObject.SetActive(false);

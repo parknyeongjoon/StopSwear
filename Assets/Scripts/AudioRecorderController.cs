@@ -37,10 +37,7 @@ public class AudioRecorderController : MonoBehaviour
     {
         recorder = new AndroidJavaObject("com.example.unityplugin.RecordPlugin");
         uiManager = UIManager.Instance();
-    }
 
-    public void StartRecording()
-    {
         if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
         {
             Permission.RequestUserPermission(Permission.ExternalStorageWrite);
@@ -50,7 +47,10 @@ public class AudioRecorderController : MonoBehaviour
         {
             Permission.RequestUserPermission(Permission.Microphone);
         }
+    }
 
+    public void StartRecording()
+    {
         if (!isRecord)
         {
             // 녹음 시작을 호출하는 코드
@@ -73,14 +73,15 @@ public class AudioRecorderController : MonoBehaviour
         recorder.Call("startVoiceCheck");
     }
 
-    public void SendVoiceCheck()
+    public void StopVoiceCheck()
     {
-        recorder.Call("sendVoiceCheck");
+        recorder.Call("stopVoiceCheck");
     }
 
-    ///
     public void Set_JWT_TOKEN(string token)
     {
         recorder.Call("Set_JWT_TOKEN", token);
     }
+
+
 }
