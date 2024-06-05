@@ -26,6 +26,8 @@ public class LoginManager : MonoBehaviour
 
     #region utility
 
+    bool isVoiceCheck = false;
+
     void AutoSignIn() // 나중에 하기
     {
         EmailIF.text = PlayerPrefs.GetString("");
@@ -91,10 +93,10 @@ public class LoginManager : MonoBehaviour
 
     public void StartSignUp()
     {
-        StartCoroutine(SignUp());
+        StartCoroutine(CheckSignUp());
     }
 
-    public IEnumerator SignUp()
+    public IEnumerator CheckSignUp()
     {
         // email validation
         if (!isValidEmail(SUEmailIF.text))
@@ -161,6 +163,7 @@ public class LoginManager : MonoBehaviour
         }
         else // student
         {
+            isVoiceCheck = false;
             bool classIdExist = true;
             yield return httpController.GetMethod("auth/exists/class?classId=" + SUCodeIF.text, (response) =>
             {
@@ -179,9 +182,13 @@ public class LoginManager : MonoBehaviour
             userDataJson["classId"] = SUCodeIF.text;
             string userDataString = userDataJson.ToString();
 
+            OpenCheckPanel();
+
+            yield return new WaitUntil(() => isVoiceCheck);
+            
             yield return httpController.PostMethod("auth/signup/student", userDataString, (response) =>
             {
-                OpenCheckPanel();
+                OpenSignInPanel();
             });
         }
     }
@@ -278,7 +285,7 @@ public class LoginManager : MonoBehaviour
         RecordingProgressImg.fillAmount = 0;
 
         recorder.SendVoiceCheck();
-        OpenSignInPanel();
+        isVoiceCheck = true;
         voiceCheckCoroutine = null;
     }
 
