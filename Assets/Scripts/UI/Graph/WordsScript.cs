@@ -21,6 +21,7 @@ public class WordsScript : MonoBehaviour
     [SerializeField] Sprite upImg, downImg;
     [SerializeField] GameObject DetailWordsPanel;
     [SerializeField] DetailsPanelScript details;
+    [SerializeField] RectTransform scrollContent;
 
     private void Start()
     {
@@ -38,7 +39,6 @@ public class WordsScript : MonoBehaviour
         query += "?date=" + date.ToString("yyyy-MM-dd");
         yield return http.GetMethod(query, (response) =>
         {
-            Debug.Log(response);
             List<WordData> wordDatas = JsonConvert.DeserializeObject<List<WordData>>(response);
 
             if(response == null || wordDatas.Count <= 0)
@@ -65,7 +65,6 @@ public class WordsScript : MonoBehaviour
         query += "?programName=" + program.programName;
         yield return http.GetMethod(query, (response) =>
         {
-            Debug.Log(response);
             List<WordData> wordDatas = JsonConvert.DeserializeObject<List<WordData>>(response);
 
             if (response == null || response == "" || wordDatas.Count <= 0)
@@ -88,12 +87,14 @@ public class WordsScript : MonoBehaviour
             DetailWordsPanel.SetActive(false);
             detailsBtnText.text = "show details";
             detailsImg.sprite = downImg;
+            scrollContent.sizeDelta = new Vector2(scrollContent.sizeDelta.x, scrollContent.sizeDelta.y - 900);
         }
         else
         {
             DetailWordsPanel.SetActive(true);
             detailsBtnText.text = "close details";
             detailsImg.sprite = upImg;
+            scrollContent.sizeDelta = new Vector2(scrollContent.sizeDelta.x, scrollContent.sizeDelta.y + 900);
         }
     }
 }

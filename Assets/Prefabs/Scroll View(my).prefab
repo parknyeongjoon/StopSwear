@@ -121,7 +121,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8902865733605017829}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.26
+  m_Size: 0.41935483
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2808,14 +2808,14 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
     m_HighlightedColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
     m_PressedColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
-    m_SelectedColor: {r: 0, g: 0.0348835, b: 1, a: 1}
+    m_SelectedColor: {r: 0, g: 0, b: 1, a: 1}
     m_DisabledColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 0.5019608}
-    m_ColorMultiplier: 1
+    m_ColorMultiplier: 5
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
@@ -3284,14 +3284,14 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
     m_HighlightedColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
     m_PressedColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
-    m_SelectedColor: {r: 0, g: 0.0348835, b: 1, a: 1}
+    m_SelectedColor: {r: 0, g: 0, b: 1, a: 1}
     m_DisabledColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 0.5019608}
-    m_ColorMultiplier: 1
+    m_ColorMultiplier: 5
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
@@ -4045,14 +4045,14 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
     m_HighlightedColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
     m_PressedColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
-    m_SelectedColor: {r: 0, g: 0.0348835, b: 1, a: 1}
+    m_SelectedColor: {r: 0, g: 0, b: 1, a: 1}
     m_DisabledColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 0.5019608}
-    m_ColorMultiplier: 1
+    m_ColorMultiplier: 5
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
@@ -4305,7 +4305,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 5000}
+  m_SizeDelta: {x: 0, y: 3100}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &526000501645635964
 MonoBehaviour:
@@ -4575,14 +4575,14 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
     m_HighlightedColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
     m_PressedColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
-    m_SelectedColor: {r: 0, g: 0.0348835, b: 1, a: 1}
+    m_SelectedColor: {r: 0, g: 0, b: 1, a: 1}
     m_DisabledColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 0.5019608}
-    m_ColorMultiplier: 1
+    m_ColorMultiplier: 5
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
@@ -5162,14 +5162,14 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
     m_HighlightedColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
     m_PressedColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 1}
-    m_SelectedColor: {r: 0, g: 0.0348835, b: 1, a: 1}
+    m_SelectedColor: {r: 0, g: 0, b: 1, a: 1}
     m_DisabledColor: {r: 0.16470589, g: 0.18039216, b: 0.627451, a: 0.5019608}
-    m_ColorMultiplier: 1
+    m_ColorMultiplier: 5
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
@@ -5729,6 +5729,10 @@ PrefabInstance:
       propertyPath: detailsImg
       value: 
       objectReference: {fileID: 1642953818428677105}
+    - target: {fileID: 4324782773778312844, guid: 12824210bf6d4cf489263f0920757090, type: 3}
+      propertyPath: scrollContent
+      value: 
+      objectReference: {fileID: 4934317044026107631}
     - target: {fileID: 4324782773778312844, guid: 12824210bf6d4cf489263f0920757090, type: 3}
       propertyPath: detailsBtnText
       value: 
@@ -6307,6 +6311,10 @@ PrefabInstance:
       propertyPath: details
       value: 
       objectReference: {fileID: 1578067783977929448}
+    - target: {fileID: 4324782773778312844, guid: 12824210bf6d4cf489263f0920757090, type: 3}
+      propertyPath: scrollContent
+      value: 
+      objectReference: {fileID: 4934317044026107631}
     - target: {fileID: 4324782773778312844, guid: 12824210bf6d4cf489263f0920757090, type: 3}
       propertyPath: DetailWordsPanel
       value: 

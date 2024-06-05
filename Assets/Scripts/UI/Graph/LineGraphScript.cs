@@ -121,6 +121,8 @@ public class LineGraphScript : MonoBehaviour
 
         foreach (var data in datas.raw)
         {
+            if(DateTime.Parse(data.date) > DateTime.Today) { continue; }
+
             TMP_Text tempTxt = Instantiate(XElem, XContent.transform).GetComponent<TMP_Text>();
             tempTxt.text = DateTime.Parse(data.date).ToString("MM-dd");
 

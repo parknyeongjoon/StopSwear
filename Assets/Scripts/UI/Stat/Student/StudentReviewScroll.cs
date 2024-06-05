@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -34,13 +35,20 @@ public class StudentReviewScroll : MonoBehaviour
     IEnumerator GetRank(string programName)
     {
         yield return new WaitUntil(() => http != null);
-        //yield return http.GetMethod("groupRank", (response) =>
-        //{
-
-        //});
+        yield return http.GetMethod("statistics/rank/class?date=" + DateTime.Today.ToString("yyyy-MM-dd"), (response) => {
+            classRank.text = response;
+        });
+        yield return http.GetMethod("manage/class/program/count?date=" + DateTime.Today.ToString("yyyy-MM-dd"), (response) =>
+        {
+            classRank.text = classRank.text + " / " + response.ToString();
+        });
         yield return http.GetMethod("statistics/rank?programName=" + programName, (response) =>
         {
-            myRank.text = response + " / n µî";
+            myRank.text = response;
+        });
+        yield return http.GetMethod("manage/students/program/count?programName=" + programName, (response) =>
+        {
+            myRank.text = myRank.text + " / " + response.ToString();
         });
     }
 

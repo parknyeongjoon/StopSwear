@@ -4408,6 +4408,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scroll View(my)
       objectReference: {fileID: 0}
+    - target: {fileID: 278536708777855114, guid: 3ed0c60569bd31e4ebbf40eeea254ab6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 753130389319547903, guid: 3ed0c60569bd31e4ebbf40eeea254ab6, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -4750,7 +4754,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8902865733605017829, guid: 3ed0c60569bd31e4ebbf40eeea254ab6, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.74
+      value: 0.5806452
       objectReference: {fileID: 0}
     - target: {fileID: 9009326352232472200, guid: 3ed0c60569bd31e4ebbf40eeea254ab6, type: 3}
       propertyPath: m_AnchorMax.y

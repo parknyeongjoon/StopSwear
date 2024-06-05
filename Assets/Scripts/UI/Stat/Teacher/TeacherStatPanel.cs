@@ -1,8 +1,7 @@
 using Newtonsoft.Json;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,13 +14,18 @@ public class TeacherStatPanel : MonoBehaviour
     [SerializeField] StudentMyStatPanel oneStat;
     [SerializeField] TeacherGroupStatPanel groupStat;
     [SerializeField] InfoPanel infoPanel;
+    [SerializeField] TMP_Text sortBtnTxt;
+    [SerializeField] RectTransform memberRect;
 
     ProgramInfo programInfo;
+    bool isSortByRank = false;
+    float originHeight;
 
     void Start()
     {
         http = HttpController.Instance();
         StartCoroutine(SetPanel());
+        originHeight = 200;
     }
 
     IEnumerator SetPanel()
@@ -43,17 +47,23 @@ public class TeacherStatPanel : MonoBehaviour
 
     public void SetMemberList(string programName)
     {
-        StartCoroutine(GetMemberList(programName));
+        StartCoroutine(GetMemberList(programName, isSortByRank));
     }
 
-    IEnumerator GetMemberList(string programName)
+    IEnumerator GetMemberList(string programName, bool isSortByRank)
     {
-        yield return http.GetMethod("manage/students/program?programName=" + programName, (response) =>
+        string query = "manage/students/program?programName=" + programName;
+        if (isSortByRank)
+        {
+            query = query + "&sorted=" + isSortByRank.ToString();
+        }
+        yield return http.GetMethod(query, (response) =>
         {
             UIManager.Instance().SetClear(memberContent.transform);
 
             List<UserInfo> studentList = JsonConvert.DeserializeObject<List<UserInfo>>(response);
-
+            int count = studentList.Count;
+            memberRect.sizeDelta = new Vector2(memberRect.sizeDelta.x, originHeight + 250 * count);
             foreach (UserInfo student in studentList)
             {
                 StartCoroutine(SetStudentCard(programName, student));
@@ -87,6 +97,14 @@ public class TeacherStatPanel : MonoBehaviour
         });
         studentCardObj.GetComponent<StudentCard>().SetText(student.name, rank, total_count, most_word);
         studentCardObj.GetComponent<Button>().onClick.AddListener(() => OpenOneStat(student.id));
+    }
+
+    public void ToggleSortBtn()
+    {
+        isSortByRank = !isSortByRank;
+        if (isSortByRank) { sortBtnTxt.text = "랭크 순"; }
+        else { sortBtnTxt.text = "이름 순"; }
+        SetMemberList(programInfo.programName);
     }
 
     public void OpenOneStat(int id)

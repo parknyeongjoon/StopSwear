@@ -18,7 +18,6 @@ public class CircleGraphScript : MonoBehaviour
         foreach (WordData wordData in wordDatas)
         {
             count += wordData.count;
-            Debug.Log(count);
         }
         if(size == 0)
         {
@@ -33,7 +32,7 @@ public class CircleGraphScript : MonoBehaviour
             {
                 GameObject temp = Instantiate(circleObject, transform);
                 TMP_Text circleTxt = temp.GetComponentInChildren<TMP_Text>();
-                circleTxt.text = wordDatas[i].word + " " + ((float)wordDatas[i].count / count * 100).ToString("F0");
+                circleTxt.text = wordDatas[i].word + " (" + ((float)wordDatas[i].count / count * 100).ToString("F0") + "%)";
                 circleTxt.rectTransform.rotation = Quaternion.Euler(0, 0, -(360 - rotate));
                 Image circleImg = temp.GetComponent<Image>();
                 circleImg.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
@@ -49,7 +48,7 @@ public class CircleGraphScript : MonoBehaviour
             {
                 GameObject temp = Instantiate(circleObject, transform);
                 TMP_Text circleTxt = temp.GetComponentInChildren<TMP_Text>();
-                circleTxt.text = wordDatas[i].word + " " + ((float)wordDatas[i].count / count * 100).ToString("F0");
+                circleTxt.text = wordDatas[i].word + " (" + ((float)wordDatas[i].count / count * 100).ToString("F0") + "%)";
                 circleTxt.rectTransform.rotation = Quaternion.Euler(0, 0, -(360 - rotate));
                 Image circleImg = temp.GetComponent<Image>();
                 circleImg.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
@@ -61,7 +60,7 @@ public class CircleGraphScript : MonoBehaviour
 
             GameObject last = Instantiate(circleObject, transform);
             TMP_Text lastTxt = last.GetComponentInChildren<TMP_Text>();
-            lastTxt.text = "기타: " + ((float)(count - word_count) / count * 100).ToString("F0");
+            lastTxt.text = "기타: (" + ((float)(count - word_count) / count * 100).ToString("F0") + "%)";
             lastTxt.rectTransform.rotation = Quaternion.Euler(0, 0, -(360 - rotate));
             Image lastImg = last.GetComponent<Image>();
             lastImg.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));

@@ -18,8 +18,13 @@ public class DetailsPanelScript : MonoBehaviour
         {
             if(max < wordData.count) { max = wordData.count; }
         }
+        int size = 8;
+        if(size > wordDatas.Count)
+        {
+            size = wordDatas.Count;
+        }
 
-        for (int i = 0; i < wordDatas.Count; i++)
+        for (int i = 0; i < size; i++)
         {
             WordData wordData = wordDatas[i];
 

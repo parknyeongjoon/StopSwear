@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -72,15 +73,16 @@ public class InfoPanel : MonoBehaviour
             {
                 yield return http.GetMethod("statistics/rank?programName=" + info.programName, (response) =>
                 {
-                    Debug.Log(response);
                     rankTxt.text = response + " 등!!";
                 });
             }
             else if (uiManager.role == "TEACHER" || uiManager.role == "MANAGER")
             {
-                rankTxt.text = "요주의 인물: ";
-            }
-            
+                yield return http.GetMethod("manage/students/program?programName=" + info.programName + "&sorted=true", (response) => {
+                    List<UserInfo> students = JsonConvert.DeserializeObject<List<UserInfo>>(response);
+                    rankTxt.text = "주의 인물: " + students[0].name;
+                });
+            }  
         }
     }
 

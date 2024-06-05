@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class StudentGroupStatPanel : MonoBehaviour
@@ -26,10 +25,20 @@ public class StudentGroupStatPanel : MonoBehaviour
     IEnumerator GetMyRank(ProgramInfo program)
     {
         yield return new WaitUntil(() => http != null);
-        // group rank Ãß°¡
+        yield return http.GetMethod("statistics/rank/class?date=" + DateTime.Today.ToString("yyyy-MM-dd"), (response) => {
+            groupRankTxt.text = response;
+        });
+        yield return http.GetMethod("manage/class/program/count?date=" + DateTime.Today.ToString("yyyy-MM-dd"), (response) =>
+        {
+            groupRankTxt.text = groupRankTxt.text + " / " + response.ToString();
+        });
         yield return http.GetMethod("statistics/rank?programName=" + program.programName, (response) =>
         {
-            myRankTxt.text = response + " / n µî";
+            myRankTxt.text = response;
+        });
+        yield return http.GetMethod("manage/students/program/count?programName=" + program.programName, (response) =>
+        {
+            myRankTxt.text = myRankTxt.text + " / " + response.ToString();
         });
     }
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +13,7 @@ public class StudentMyStatPanel : MonoBehaviour
         if(_id != 0) { id = _id;}
         StartCoroutine(mostWordByProgram.SetProgramGraph(program, id));
         StartCoroutine(wordsByProgram.GetWordsByDay(program, id));
+        DayBtnAnim((int)DateTime.Today.DayOfWeek-1);
     }
 
     IEnumerator GetDataByDate(DateTime date)
@@ -28,14 +28,14 @@ public class StudentMyStatPanel : MonoBehaviour
         {
             if (i == day)
             {
-                dayToggleImg[i].color = new Color(100, 100, 100);
+                dayToggleImg[i].color = new Color(0, 0, 1);
                 DateTime today = DateTime.Today;
                 DateTime date = today.AddDays(day - (int)today.DayOfWeek + 1);
                 StartCoroutine(GetDataByDate(date));
             }
             else
             {
-                dayToggleImg[i].color = new Color(255, 255, 255);
+                dayToggleImg[i].color = new Color(41.0f/255, 45.0f/255, 160.0f/255);
             }
         }
     }
