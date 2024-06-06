@@ -98,6 +98,31 @@ public class HttpController : MonoBehaviour
         }
     }
 
+    public IEnumerator DeleteMethod(string query, Action<string> callback)
+    {
+        using UnityWebRequest request = UnityWebRequest.Delete(apiUrl + query);
+        // 필요시 헤더 추가
+        foreach (var header in headers)
+        {
+            request.SetRequestHeader(header.Key, header.Value);
+        }
+
+        // 요청 보내기
+        yield return request.SendWebRequest();
+
+        // 에러 핸들링
+        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError("Error: " + request.error);
+            callback(null);
+        }
+        else
+        {
+            //Debug.Log("Response: " + request.downloadHandler.text);
+            callback(null);
+        }
+    }
+
     public T GetJsonData<T>(string response)
     {
         T JsonData = JsonUtility.FromJson<T>(response.ToString());

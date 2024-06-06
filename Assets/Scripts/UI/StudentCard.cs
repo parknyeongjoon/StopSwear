@@ -16,8 +16,8 @@ public class StudentCard : MonoBehaviour
         word.text = "최다 사용: " + _word;
     }
 
-    public void OpenStudentStatPanel()
+    public void SetText(string _student_name)
     {
-
+        student_name.text = _student_name;
     }
 }
