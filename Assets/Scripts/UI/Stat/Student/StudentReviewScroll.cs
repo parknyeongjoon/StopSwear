@@ -23,7 +23,7 @@ public class StudentReviewScroll : MonoBehaviour
         StartCoroutine(mostWordByProgram.SetProgramGraph(info, id));
         StartCoroutine(wordsByProgram.GetWordsByDay(info, id));
 
-        StartCoroutine(GetRank(info.programName));
+        StartCoroutine(GetRank(info.programName, id));
         StartCoroutine(GetGroupWords(info.programName));
     }
 
@@ -32,17 +32,16 @@ public class StudentReviewScroll : MonoBehaviour
         programInfo.text = info.programName + "\n" + info.startDate + " ~ " + info.endDate;
     }
 
-    IEnumerator GetRank(string programName)
+    IEnumerator GetRank(string programName, int id)
     {
         yield return new WaitUntil(() => http != null);
-        yield return http.GetMethod("statistics/rank/class?date=" + DateTime.Today.ToString("yyyy-MM-dd"), (response) => {
-            classRank.text = response;
-        });
-        yield return http.GetMethod("manage/class/program/count?date=" + DateTime.Today.ToString("yyyy-MM-dd"), (response) =>
+        string query = "statistics/rank";
+        if(id != 0)
         {
-            classRank.text = classRank.text + " / " + response.ToString();
-        });
-        yield return http.GetMethod("statistics/rank?programName=" + programName, (response) =>
+            query +="/" + id.ToString();
+        }
+        query += "?programName=" + programName;
+        yield return http.GetMethod(query, (response) =>
         {
             myRank.text = response;
         });
@@ -70,7 +69,7 @@ public class StudentReviewScroll : MonoBehaviour
     [SerializeField] TMP_Text programInfo;
     [SerializeField] WordsScript mostWordByProgram;
     [SerializeField] LineGraphScript wordsByProgram;
-    [SerializeField] TMP_Text classRank, myRank;
+    [SerializeField] TMP_Text myRank;
     [SerializeField] CircleGraphScript groupWordsCircleGraph;
     [SerializeField] DetailsPanelScript detailGraph;
 

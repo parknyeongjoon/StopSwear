@@ -96,7 +96,6 @@ public class TeacherReviewPanel : MonoBehaviour
 
     IEnumerator SetStudentCard(ProgramInfo program, UserInfo student)
     {
-        Debug.Log(student.name);
         string rank = "-1", total_count = "temp", most_word = "temp";
         GameObject studentCardObj = Instantiate(studentCard, memberContent.transform);
         yield return http.GetMethod("statistics/rank/" + student.id + "?programName=" + program.programName, (response) =>

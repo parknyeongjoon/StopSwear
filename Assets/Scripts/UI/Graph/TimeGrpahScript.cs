@@ -37,6 +37,7 @@ public class TimeGrpahScript : MonoBehaviour
 
     public IEnumerator GetCountByDay(DateTime date, int id)
     {
+        yield return new WaitUntil(() => http != null);
         string query = "statistics/count/total";
         if(id != 0)
         {
