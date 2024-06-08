@@ -80,8 +80,13 @@ public class ProgramSettingScript : MonoBehaviour
             yield return http.GetMethod("manage/program/get/all", (response) =>
             {
                 makeProgramPanel.SetActive(false);
+                preProgramPanel.SetActive(false);
                 List<ProgramInfo> programList = JsonConvert.DeserializeObject<List<ProgramInfo>>(response);
-                if (DateTime.Parse(programList[programList.Count - 1].startDate) > DateTime.Today)
+                if(response == null || programList.Count <= 0)
+                {
+                    makeProgramPanel.SetActive(true);
+                }
+                else if (DateTime.Parse(programList[programList.Count - 1].startDate) > DateTime.Today)
                 {
                     preProgram = programList[programList.Count - 1];
                     preProgramPanel.SetActive(true);

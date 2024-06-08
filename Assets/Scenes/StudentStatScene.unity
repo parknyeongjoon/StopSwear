@@ -1747,7 +1747,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.0005202331}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &616573863
@@ -2112,7 +2112,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.3137255, g: 0.5882353, b: 1, a: 0}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -3520,8 +3520,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   programPanel: {fileID: 453264537}
   preProgramPanel: {fileID: 340480823}
+  makeProgramPanel: {fileID: 0}
   preProgramContent: {fileID: 616573861}
   preProgramCard: {fileID: 1361522026293393283, guid: 5f2bf28804bf0fb46b1f976d6d40e9f9, type: 3}
+  preProgramMemberContent: {fileID: 0}
+  preProgramStudentCard: {fileID: 0}
   infoPanel: {fileID: 759311526}
   programNameIF: {fileID: 886336436}
   startDate: {fileID: 0}
@@ -4051,7 +4054,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1671208540
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4192,7 +4195,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 134464923}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999756
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
