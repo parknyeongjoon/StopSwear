@@ -18,6 +18,8 @@ public class InfoPanel : MonoBehaviour
     [SerializeField] TMP_Text durationTxt;
     [SerializeField] Button logoutBtn;
 
+    string classCode;
+
     private void Start()
     {
         http = HttpController.Instance();
@@ -56,6 +58,7 @@ public class InfoPanel : MonoBehaviour
             {
                 if (response == null || response == "") { return; }
                 codeTxt.text += " - " + response;
+                classCode = response;
             });
         }
         yield return http.GetMethod("manage/info/user", (response) =>
@@ -96,5 +99,10 @@ public class InfoPanel : MonoBehaviour
     {
         normalPanel.SetActive(true);
         clickPanel.SetActive(false);
+    }
+
+    public void CopyClassCodeClipBoard()
+    {
+        ClipBoarController.Instance().CopyToClipboard(classCode);
     }
 }
