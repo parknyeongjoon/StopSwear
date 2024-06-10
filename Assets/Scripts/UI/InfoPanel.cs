@@ -57,7 +57,6 @@ public class InfoPanel : MonoBehaviour
             yield return http.GetMethod("manage/code/class", (response) =>
             {
                 if (response == null || response == "") { return; }
-                codeTxt.text += " - " + response;
                 classCode = response;
             });
         }
