@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: 'jdbc:h2:mem:no_swear'
+    username: root
+    password: root
+
+  h2:
+    console:
+      enabled: true
+      path: /h2_console
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        show_sql: true
+
+security:
+  jwt:
+    secret: "24aec0ad703c7228a5c048cc246eaa51fb485228b447bdddffea2269c23e50c5"
+    expiration-time: 3600000
+
