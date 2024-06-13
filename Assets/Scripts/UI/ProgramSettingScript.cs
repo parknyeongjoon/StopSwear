@@ -139,8 +139,9 @@ public class ProgramSettingScript : MonoBehaviour
 
     IEnumerator GetPreProgramList()
     {
-        yield return http.GetMethod("manage/program/get/after?date=" + DateTime.Today.AddDays(1.0f).ToString("yyyy-MM-dd"), (response) =>
+        yield return http.GetMethod("manage/program/get/after?date=" + DateTime.Today.ToString("yyyy-MM-dd"), (response) =>
         {
+            
             UIManager.Instance().SetClear(preProgramContent.transform);
             List<ProgramInfo> programList = JsonConvert.DeserializeObject<List<ProgramInfo>>(response);
             for (int i = 0; i < programList.Count; i++)

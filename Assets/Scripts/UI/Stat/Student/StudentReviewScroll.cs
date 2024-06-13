@@ -24,7 +24,7 @@ public class StudentReviewScroll : MonoBehaviour
         StartCoroutine(wordsByProgram.GetWordsByDay(info, id));
 
         StartCoroutine(GetRank(info.programName, id));
-        StartCoroutine(GetGroupWords(info.programName));
+        StartCoroutine(GetProgramWords(info.programName, id));
     }
 
     void SetProgramInfo(ProgramInfo info)
@@ -51,10 +51,16 @@ public class StudentReviewScroll : MonoBehaviour
         });
     }
 
-    IEnumerator GetGroupWords(string programName)
+    IEnumerator GetProgramWords(string programName, int _id)
     {
         yield return new WaitUntil(() => http != null);
-        yield return http.GetMethod("statistics/count/word/group?programName=" + programName, (response) =>
+        string query = "statistics/count/word/program";
+        if(_id != 0)
+        {
+            query += "/" + _id.ToString();
+        }
+        query += "?programName=" + programName;
+        yield return http.GetMethod(query, (response) =>
         {
             List<WordData> wordDatas = JsonConvert.DeserializeObject<List<WordData>>(response);
             detailGraph.SetDetails(wordDatas);
