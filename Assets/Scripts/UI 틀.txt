@@ -1,3 +1,0 @@
-패널 128 light
-버튼 C
-inputfield - C
