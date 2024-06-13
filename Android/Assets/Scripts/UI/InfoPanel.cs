@@ -2,9 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,7 +37,7 @@ public class InfoPanel : MonoBehaviour
         {
             DateTime startDate = DateTime.Parse(info.startDate);
             DateTime endDate = DateTime.Parse(info.endDate);
-            progresTxt.text = "ม๘วเทü: " + (100 * DateTime.Now.Subtract(startDate) / endDate.Subtract(startDate)).ToString("F2") + "%";
+            progresTxt.text = "ม๘วเทü: " + (100 * DateTime.Now.Subtract(startDate) / endDate.AddDays(1.0f).Subtract(startDate)).ToString("F2") + "%";
             durationTxt.text = startDate.ToString("yyyy-MM-dd") + " ~ " + endDate.ToString("yyyy-MM-dd");
         }
     }
